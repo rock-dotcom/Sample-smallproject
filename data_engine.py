@@ -49,10 +49,14 @@ def scrape_amazon(product_name):
                     
                 link_elem = item.find('a', class_='a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal') or item.find('a', class_='a-link-normal s-no-outline')
                 link = "https://www.amazon.in" + link_elem['href'] if link_elem else url
-                return price, link, title
-    except:
+                
+                img_elem = item.find('img', class_='s-image')
+                img_url = img_elem['src'] if img_elem else ""
+                
+                return price, link, title, img_url
+    except Exception as e:
         pass
-    return None, url, product_name
+    return None, url, product_name, ""
 
 def scrape_flipkart(product_name):
     query = urllib.parse.quote(product_name)
@@ -101,11 +105,17 @@ def scrape_flipkart(product_name):
 
 def generate_mock_data(product_name):
     # 1. Try to scrape real data first
-    amazon_price, amazon_url, amz_title = scrape_amazon(product_name)
+    amazon_price, amazon_url, amz_title, amz_image = scrape_amazon(product_name)
     flipkart_price, flipkart_url, fk_title, fk_image = scrape_flipkart(product_name)
     
-    # Image Fallbacks
-    image_url = fk_image if fk_image else "https://via.placeholder.com/300x200?text=Product+Image"
+    # Image Fallbacks - prioritize Amazon as Flipkart often uses base64 lazy loading
+    image_url = "https://via.placeholder.com/300x200?text=" + urllib.parse.quote(product_name)
+    
+    if amz_image and not amz_image.startswith('data:image'):
+        image_url = amz_image
+    elif fk_image and not fk_image.startswith('data:image'):
+        image_url = fk_image
+        
     if "iphone 16 pro max" in product_name.lower():
         image_url = "https://m.media-amazon.com/images/I/71WDf1fS9BL._SX679_.jpg"
     elif "iphone 16 pro" in product_name.lower():
