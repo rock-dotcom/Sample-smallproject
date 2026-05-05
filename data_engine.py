@@ -170,7 +170,7 @@ def generate_mock_data(product_name):
     fk_title = fk_title if fk_title else product_name.title()
 
     data = [
-        {"Platform": "Amazo", "Product": amz_title, "Price (₹)": round(amazon_price, 2), "Rating": round(amazon_rating, 1), "Discount (%)": amazon_discount, "Link": amazon_url, "Image_URL": image_url},
+        {"Platform": "Amazon", "Product": amz_title, "Price (₹)": round(amazon_price, 2), "Rating": round(amazon_rating, 1), "Discount (%)": amazon_discount, "Link": amazon_url, "Image_URL": image_url},
         {"Platform": "Flipkart", "Product": fk_title, "Price (₹)": round(flipkart_price, 2), "Rating": round(flipkart_rating, 1), "Discount (%)": flipkart_discount, "Link": flipkart_url, "Image_URL": image_url},
         {"Platform": "Google Shopping", "Product": product_name.title(), "Price (₹)": round(gs_price, 2), "Rating": round(gs_rating, 1), "Discount (%)": gs_discount, "Link": gs_url, "Image_URL": image_url}
     ]
